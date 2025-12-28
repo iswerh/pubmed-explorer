@@ -1,0 +1,6 @@
+streamlit
+biopython
+requests
+groq
+spacy
+python-dotenv
