@@ -1,6 +1,8 @@
 import os
 import re
 import streamlit as st
+from dotenv import load_dotenv
+load_dotenv()
 
 from src.pubmed import search_pmids, fetch_summaries, fetch_abstracts
 from src.query_compiler import compile_pubmed_query
@@ -265,7 +267,7 @@ if pmids:
 
             st.markdown(ls["answer_md"])
             st.caption("All statements above are derived exclusively from the cited PubMed abstracts.")
-            
+
         with st.expander(f"Show sources ({len(pmids)} papers)"):
             _render_sources(pmids)
 

@@ -11,6 +11,11 @@ evidence-grounded answers using PubMed abstracts.
 
 Users can type any query or question, and based off their question. PubMed Explorer will generate an answer based off 
 
+## Demo
+
+[![PubMed Explorer Demo](https://img.youtube.com/vi/n5eYmsUY8QQ/0.jpg)](https://youtu.be/n5eYmsUY8QQ)
+
+
 ## What this app does
 
 1. Converts free-form questions into structured PubMed queries
