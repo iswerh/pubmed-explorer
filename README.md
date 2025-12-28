@@ -13,7 +13,8 @@ Users can type any query or question, and based off their question. PubMed Explo
 
 ## Demo
 
-[![PubMed Explorer Demo](https://youtu.be/2l6A4qfkUJw)
+[![PubMed Explorer Demo](https://img.youtube.com/vi/2l6A4qfkUJw/0.jpg)](https://youtu.be/2l6A4qfkUJw)
+
 
 
 ## What this app does
