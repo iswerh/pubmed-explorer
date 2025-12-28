@@ -1,9 +1,9 @@
 import streamlit as st
-from src.pubmed import search_pmids, fetch_summaries
+from src.pubmed import search_pmids, fetch_summaries, fetch_abstracts
 
 st.set_page_config(page_title="PubMed Explorer", page_icon="🧬", layout="wide")
 
-st.title("PubMed Explorer")
+st.title("🧬 PubMed Explorer")
 st.write("Natural-language PubMed search with author/date filters and optional AI summaries.")
 
 query = st.text_input("Enter a research question:")
@@ -16,7 +16,9 @@ with col2:
     st.caption("Tip: related terms are optional and help broaden search coverage.")
 
 if st.button("Search"):
+    # Build a simple PubMed term from query + optional related terms
     term = query.strip()
+
     if related.strip():
         terms = [t.strip() for t in related.split(",") if t.strip()]
         if terms:
@@ -36,12 +38,21 @@ if st.button("Search"):
     with st.spinner("Fetching summaries..."):
         summaries = fetch_summaries(pmids)
 
+    with st.spinner("Fetching abstracts..."):
+        abstracts = fetch_abstracts(pmids)
+
     st.subheader("Top results")
     for pmid in pmids:
         s = summaries.get(pmid, {})
         title = (s.get("title") or "No title").strip()
         pubdate = s.get("pubdate") or "No date"
         link = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
-        st.markdown(f"**{title}**  \n{pubdate} • PMID: `{pmid}` • {link}")
+        abstract = abstracts.get(pmid, "No abstract available.")
+
+        with st.expander(title):
+            st.markdown(f"**Date:** {pubdate}")
+            st.markdown(f"**PMID:** `{pmid}`")
+            st.markdown(f"**Link:** {link}")
+            st.write(abstract)
 
 st.caption("Security: API keys are not stored in this repo. AI features come later and are optional.")

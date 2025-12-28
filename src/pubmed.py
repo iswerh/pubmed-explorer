@@ -1,4 +1,6 @@
 import requests
+import os
+from Bio import Entrez
 
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 
@@ -24,4 +26,29 @@ def fetch_summaries(pmids: list[str]) -> dict[str, dict]:
     out: dict[str, dict] = {}
     for pmid in pmids:
         out[pmid] = result.get(pmid, {})
+    return out
+
+
+def fetch_abstracts(pmids: list[str]) -> dict[str, str]:
+    """
+    Fetch abstracts via Entrez efetch.
+    Uses ENTREZ_EMAIL env var if provided (recommended by NCBI).
+    """
+    if not pmids:
+        return {}
+
+    Entrez.email = os.getenv("ENTREZ_EMAIL", "your_email@example.com")
+
+    handle = Entrez.efetch(db="pubmed", id=",".join(pmids), retmode="xml")
+    records = Entrez.read(handle)
+    handle.close()
+
+    out: dict[str, str] = {}
+    for art in records.get("PubmedArticle", []):
+        pmid = str(art["MedlineCitation"]["PMID"])
+        article = art["MedlineCitation"]["Article"]
+        abs_list = article.get("Abstract", {}).get("AbstractText", [])
+        abstract = " ".join([str(t) for t in abs_list]) if abs_list else "No abstract available."
+        out[pmid] = abstract
+
     return out
